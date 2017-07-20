@@ -568,7 +568,35 @@ $this->sendmail($useremail,$adminmail,$subject,$msg);
   }	
 	
 	
+/*******Change pass***********/
+ public function updatepass() {
+ 
+ $admin_id = $this->session->userdata('logged_in');
+
+	$data['admin_id']=$admin_id;
+		if($admin_id=='')
+		{
+		 redirect(base_url().'logout');	
+		}
+		
+		
+		 $this->form_validation->set_rules('password', 'Password', 'required|matches[re-password]');
+$this->form_validation->set_rules('re-password', 'Re-password', 'required');
+	if ($this->form_validation->run() == true){
 	
+	 $update = array(
+		 'admin_password' =>$this->input->post('password'),
+	   
+	   );
+	   
+	$this->database_model->update_values('tbl_admin',array('admin_id'=>$admin_id),$update);
+	$this->logout();
+	}
+		
+ $this->load->view('admin/update-password',$data);
+ }
+
+/**********************/	
 	
 public function  view_details_form()
 {
